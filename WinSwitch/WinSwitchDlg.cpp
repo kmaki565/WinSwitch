@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_MESSAGE(ADD_ITEM_TO_WINDOW_LIST, &CWinSwitchDlg::OnAddItemToWindowList)
 	ON_BN_CLICKED(IDSHOW, &CWinSwitchDlg::OnBnClickedShow)
 	ON_BN_CLICKED(IDC_BUTTON1, &CWinSwitchDlg::OnBnClickedButton1)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST1, &CWinSwitchDlg::OnNMDblclkList1)
 END_MESSAGE_MAP()
 
 
@@ -295,4 +296,14 @@ void CWinSwitchDlg::OnBnClickedShow()
 void CWinSwitchDlg::OnBnClickedButton1()
 {
 	RefreshWinList();
+}
+
+
+void CWinSwitchDlg::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	OnBnClickedShow();
+
+	*pResult = 0;
 }

@@ -45,4 +45,5 @@ protected:
 public:
 	afx_msg void OnBnClickedShow();
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
 };
