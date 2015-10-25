@@ -67,6 +67,20 @@ BOOL CWinSwitchApp::InitInstance()
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
+	//
+	// Set our own class name
+	//
+	WNDCLASS wndcls;
+	::GetClassInfo(NULL, MAKEINTRESOURCE(32770), &wndcls);
+
+	wndcls.lpszClassName = _T("WinSwitchWndClass");
+
+	if (!::RegisterClass(&wndcls))
+	{
+		_ASSERTE(!__FUNCTION__ " Failed to register window class");
+		return FALSE;
+	}
+
 	CWinSwitchDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
