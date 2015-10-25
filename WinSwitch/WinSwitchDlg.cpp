@@ -69,6 +69,8 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CWinSwitchDlg::OnBnClickedButton1)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST1, &CWinSwitchDlg::OnNMDblclkList1)
 	ON_BN_CLICKED(IDC_CHECK1, &CWinSwitchDlg::OnBnClickedCheck1)
+	ON_MESSAGE(WM_SYSTRAYNOTIFY, &CWinSwitchDlg::OnSysTrayNotify)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -104,6 +106,10 @@ BOOL CWinSwitchDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+
+	// Add an icon to taskbar notification area
+	UpdateSysTrayIcon(NIM_ADD);
+
 	(void)m_ctlList.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 	m_ctlList.SetHeadings(_T("Window name,320;Class name,200;Proc name,200"));
 	m_ctlList.LoadColumnInfo();
@@ -321,4 +327,111 @@ void CWinSwitchDlg::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
 void CWinSwitchDlg::OnBnClickedCheck1()
 {
 	RefreshWinList();
+}
+
+bool CWinSwitchDlg::UpdateSysTrayIcon(DWORD dwAction)
+{
+	NOTIFYICONDATA nid = { 0 };
+	nid.cbSize = sizeof(NOTIFYICONDATA);
+	nid.hWnd = m_hWnd;
+
+	HICON hIconPrev = NULL;
+
+	switch (dwAction)
+	{
+	case NIM_MODIFY:
+	case NIM_ADD:
+	{
+		nid.uFlags |= NIF_TIP | NIF_ICON | NIF_MESSAGE;
+		nid.uCallbackMessage = WM_SYSTRAYNOTIFY;
+		lstrcpyn(nid.szTip, _T("WinSwitch"), ARRAYSIZE(nid.szTip));
+		nid.hIcon = m_hIcon;
+	}
+		break;
+	case NIM_DELETE:
+		hIconPrev = m_hIcon;
+		break;
+	}
+
+	BOOL bRes = ::Shell_NotifyIcon(dwAction, &nid);
+	ATLASSERT(bRes);
+
+	if (hIconPrev != NULL)
+		::DestroyIcon(hIconPrev);
+
+	return (bRes != FALSE);
+}
+
+
+afx_msg LRESULT CWinSwitchDlg::OnSysTrayNotify(WPARAM wParam, LPARAM lParam)
+{
+	switch (lParam)
+	{
+	case WM_LBUTTONUP:
+		//TODO: ShowAndActivate();
+		break;
+	case WM_RBUTTONUP:
+		HandleContextCommand(ShowContextMenu());
+		break;
+	}
+	return 0;
+}
+
+int CWinSwitchDlg::ShowContextMenu(void)
+{
+	HMENU hMenu = ::LoadMenu(
+		_AtlBaseModule.GetResourceInstance(),
+		MAKEINTRESOURCE(IDR_MENU1));
+	ATLASSERT(hMenu != NULL);
+
+	HMENU hTrackPopup = ::GetSubMenu(hMenu, 0);
+	ATLASSERT(hTrackPopup != NULL);
+
+	const UINT nCheck = MF_BYCOMMAND |
+		(IsWindowVisible() ? MF_CHECKED : MF_UNCHECKED);
+	::CheckMenuItem(hTrackPopup, IDC_LAUNCH, nCheck);
+
+	POINT pt = { 0 };
+	::GetCursorPos(&pt);
+
+	::SetForegroundWindow(m_hWnd);
+
+	int nCmd = ::TrackPopupMenu(hTrackPopup, TPM_RETURNCMD,
+		pt.x, pt.y, 0, m_hWnd, NULL);
+
+	PostMessage(WM_NULL);
+
+	return nCmd;
+}
+
+void CWinSwitchDlg::HandleContextCommand(int nCmd)
+{
+	if (nCmd == 0) return;
+
+	switch (nCmd)
+	{
+	case IDC_LAUNCH:
+		if (IsWindowVisible())
+			ShowWindow(SW_HIDE);
+		else
+			ShowWindow(SW_SHOW);
+		break;
+	case IDC_EXIT:
+		DestroyWindow();
+		break;
+	default:
+		ATLASSERT(FALSE);
+	}
+}
+
+void CWinSwitchDlg::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+
+	// TODO: Add your message handler code here
+	if (m_hIcon)	// TODO: Should be m_hSysTrayIcon...
+	{
+		ATLVERIFY(UpdateSysTrayIcon(NIM_DELETE));
+		::DestroyIcon(m_hIcon);
+	}
 }

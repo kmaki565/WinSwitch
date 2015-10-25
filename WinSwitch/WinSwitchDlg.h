@@ -43,10 +43,17 @@ protected:
 	afx_msg LRESULT OnAddItemToWindowList(WPARAM wParam, LPARAM lParam);
 	void GetAppIcon(HWND hwnd);
 	BOOL GetProcessNameByWindowHandle(HWND hwnd, LPTSTR ProcName);
+	bool UpdateSysTrayIcon(DWORD dwAction);
+	int ShowContextMenu(void);
+	void HandleContextCommand(int nCmd);
 public:
 	afx_msg void OnBnClickedShow();
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
 	CButton m_CheckFullPath;
 	afx_msg void OnBnClickedCheck1();
+protected:
+	afx_msg LRESULT OnSysTrayNotify(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnDestroy();
 };
