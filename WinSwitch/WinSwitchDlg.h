@@ -7,6 +7,7 @@
 #ifndef SORTLISTCTRL_H
 #include "SortListCtrl\SortListCtrl.h"
 #endif	// SORTLISTCTRL_H
+#include "afxwin.h"
 
 // CWinSwitchDlg dialog
 class CWinSwitchDlg : public CDialogEx
@@ -46,4 +47,6 @@ public:
 	afx_msg void OnBnClickedShow();
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
+	CButton m_CheckFullPath;
+	afx_msg void OnBnClickedCheck1();
 };

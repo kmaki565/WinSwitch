@@ -57,6 +57,7 @@ void CWinSwitchDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_ctlList);
+	DDX_Control(pDX, IDC_CHECK1, m_CheckFullPath);
 }
 
 BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
@@ -67,6 +68,7 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_BN_CLICKED(IDSHOW, &CWinSwitchDlg::OnBnClickedShow)
 	ON_BN_CLICKED(IDC_BUTTON1, &CWinSwitchDlg::OnBnClickedButton1)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST1, &CWinSwitchDlg::OnNMDblclkList1)
+	ON_BN_CLICKED(IDC_CHECK1, &CWinSwitchDlg::OnBnClickedCheck1)
 END_MESSAGE_MAP()
 
 
@@ -197,9 +199,13 @@ afx_msg LRESULT CWinSwitchDlg::OnAddItemToWindowList(WPARAM wParam, LPARAM lPara
 	TCHAR ProcName[MAX_PATH];
 	LPTSTR lpProcName;
 	if (GetProcessNameByWindowHandle(hwnd, ProcName)) {
-		lpProcName = ProcName;
-		// To show only exe name
-		//lpProcName = _tcsrchr(ProcName, _T('\\')) + sizeof(TCHAR);
+		if (m_CheckFullPath.GetCheck() == BST_CHECKED) {
+			lpProcName = ProcName;
+		}
+		else {
+			// To show only exe name
+			lpProcName = _tcsrchr(ProcName, _T('\\')) + 1;
+		}
 	}
 	else {
 		_stprintf_s(ProcName, _T("unable to get proc name"));
@@ -306,4 +312,10 @@ void CWinSwitchDlg::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
 	OnBnClickedShow();
 
 	*pResult = 0;
+}
+
+
+void CWinSwitchDlg::OnBnClickedCheck1()
+{
+	RefreshWinList();
 }
