@@ -73,7 +73,7 @@ BOOL CWinSwitchApp::InitInstance()
 	WNDCLASS wndcls;
 	::GetClassInfo(NULL, MAKEINTRESOURCE(32770), &wndcls);
 
-	wndcls.lpszClassName = _T("WinSwitchWndClass");
+	wndcls.lpszClassName = MY_WNDCLS_NAME;
 
 	if (!::RegisterClass(&wndcls))
 	{

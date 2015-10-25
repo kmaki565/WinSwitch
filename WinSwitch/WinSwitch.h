@@ -10,6 +10,7 @@
 
 #include "resource.h"		// main symbols
 
+#define MY_WNDCLS_NAME _T("WinSwitchWndClass")
 #define ADD_ITEM_TO_WINDOW_LIST (WM_APP + 0)
 
 // CWinSwitchApp:

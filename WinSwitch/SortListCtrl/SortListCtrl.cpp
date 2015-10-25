@@ -10,7 +10,7 @@ Purpose:  Provides a sortable list control, it will sort text, numbers
 					arrows just like windows explorer!
 ----------------------------------------------------------------------*/
 
-#include "stdafx.h"
+#include "..\stdafx.h"
 #include "SortListCtrl.h"
 
 #ifdef _DEBUG

@@ -197,7 +197,7 @@ afx_msg LRESULT CWinSwitchDlg::OnAddItemToWindowList(WPARAM wParam, LPARAM lPara
 	::GetClassName(hwnd, ClassName, sizeof(ClassName));
 
 	// We don't list up my window
-	if (_tcscmp(ClassName, _T("WinSwitchWndClass")) == 0) return 0;
+	if (_tcscmp(ClassName, MY_WNDCLS_NAME) == 0) return 0;
 
 	TCHAR ProcName[MAX_PATH];
 	LPTSTR lpProcName;
