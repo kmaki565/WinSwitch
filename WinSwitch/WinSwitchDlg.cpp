@@ -71,6 +71,7 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK1, &CWinSwitchDlg::OnBnClickedCheck1)
 	ON_MESSAGE(WM_SYSTRAYNOTIFY, &CWinSwitchDlg::OnSysTrayNotify)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDCANCEL, &CWinSwitchDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
@@ -296,13 +297,18 @@ void CWinSwitchDlg::OnBnClickedShow()
 			HWND SelectedWin = (HWND)m_ctlList.GetItemData(nItem);
 			// Bring to top
 			if (::IsIconic(SelectedWin)) {
-				::ShowWindow(SelectedWin, SW_RESTORE);
+//				::ShowWindow(SelectedWin, SW_RESTORE);
+				::SendMessage(SelectedWin, WM_SYSCOMMAND, SC_RESTORE, 0); // Works on Admin process window!
 			}
-			::SetWindowPos(SelectedWin, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-
-			TRACE(_T("Item %d was selected!... hwnd = 0x%X\n"), nItem, (int)SelectedWin);
-
-			// you could do your own processing on nItem here
+			//if (::SetWindowPos(SelectedWin, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE)) {
+			if (::SetForegroundWindow(SelectedWin)) {
+				// If showing up the windows is successful, hide the dialog
+				ShowWindow(SW_HIDE);
+			}
+			else {
+				TRACE(_T("Could not bring item %d to top... hwnd = 0x%X, Error: %0x%X\n"), 
+					nItem, (int)SelectedWin, GetLastError());
+			}
 		}
 	}
 }
@@ -368,7 +374,10 @@ afx_msg LRESULT CWinSwitchDlg::OnSysTrayNotify(WPARAM wParam, LPARAM lParam)
 	switch (lParam)
 	{
 	case WM_LBUTTONUP:
-		//TODO: ShowAndActivate();
+		if (IsWindowVisible())
+			ShowWindow(SW_HIDE);
+		else
+			ShowAndActivate();
 		break;
 	case WM_RBUTTONUP:
 		HandleContextCommand(ShowContextMenu());
@@ -414,7 +423,7 @@ void CWinSwitchDlg::HandleContextCommand(int nCmd)
 		if (IsWindowVisible())
 			ShowWindow(SW_HIDE);
 		else
-			ShowWindow(SW_SHOW);
+			ShowAndActivate();
 		break;
 	case IDC_EXIT:
 		DestroyWindow();
@@ -434,4 +443,19 @@ void CWinSwitchDlg::OnDestroy()
 		ATLVERIFY(UpdateSysTrayIcon(NIM_DELETE));
 		::DestroyIcon(m_hIcon);
 	}
+}
+
+void CWinSwitchDlg::ShowAndActivate()
+{
+	if (!IsWindowVisible() || IsIconic())
+		ShowWindow(SW_SHOWNORMAL);
+
+	::SetForegroundWindow(m_hWnd);
+}
+
+
+void CWinSwitchDlg::OnBnClickedCancel()
+{
+	// Don't close the app but just put to background.
+	ShowWindow(SW_HIDE);
 }

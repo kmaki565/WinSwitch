@@ -46,6 +46,7 @@ protected:
 	bool UpdateSysTrayIcon(DWORD dwAction);
 	int ShowContextMenu(void);
 	void HandleContextCommand(int nCmd);
+	void ShowAndActivate();
 public:
 	afx_msg void OnBnClickedShow();
 	afx_msg void OnBnClickedButton1();
@@ -56,4 +57,5 @@ protected:
 	afx_msg LRESULT OnSysTrayNotify(WPARAM wParam, LPARAM lParam);
 public:
 	afx_msg void OnDestroy();
+	afx_msg void OnBnClickedCancel();
 };
