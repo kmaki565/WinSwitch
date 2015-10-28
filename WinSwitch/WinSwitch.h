@@ -11,6 +11,7 @@
 #include "resource.h"		// main symbols
 
 #define MY_WNDCLS_NAME _T("WinSwitchWndClass")
+#define CATCH_HOTKEY_ID		1
 
 #define ADD_ITEM_TO_WINDOW_LIST (WM_APP + 0)
 #define WM_SYSTRAYNOTIFY (WM_APP + 1)

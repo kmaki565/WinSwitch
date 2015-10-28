@@ -72,6 +72,9 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_MESSAGE(WM_SYSTRAYNOTIFY, &CWinSwitchDlg::OnSysTrayNotify)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDCANCEL, &CWinSwitchDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDC_BUTTON2, &CWinSwitchDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON_CLOSE_WINDOW, &CWinSwitchDlg::OnBnClickedButtonCloseWindow)
+	ON_WM_HOTKEY()
 END_MESSAGE_MAP()
 
 
@@ -107,6 +110,11 @@ BOOL CWinSwitchDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+
+	// RegisterHotKey to show this dialog
+	UINT	uiID = VK_F1;
+	UINT	uiMod = MOD_ALT;
+	::RegisterHotKey(m_hWnd, CATCH_HOTKEY_ID, uiMod, uiID);
 
 	// Add an icon to taskbar notification area
 	UpdateSysTrayIcon(NIM_ADD);
@@ -297,17 +305,21 @@ void CWinSwitchDlg::OnBnClickedShow()
 			HWND SelectedWin = (HWND)m_ctlList.GetItemData(nItem);
 			// Bring to top
 			if (::IsIconic(SelectedWin)) {
-//				::ShowWindow(SelectedWin, SW_RESTORE);
-				::SendMessage(SelectedWin, WM_SYSCOMMAND, SC_RESTORE, 0); // Works on Admin process window!
+				// Instead of ::ShowWindow(SelectedWin, SW_RESTORE);,
+				// This works on Admin process window
+				//
+				::SendMessage(SelectedWin, WM_SYSCOMMAND, SC_RESTORE, 0);
 			}
 			//if (::SetWindowPos(SelectedWin, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE)) {
 			if (::SetForegroundWindow(SelectedWin)) {
-				// If showing up the windows is successful, hide the dialog
+				// If showing up the windows is successful, hide this dialog
 				ShowWindow(SW_HIDE);
 			}
 			else {
-				TRACE(_T("Could not bring item %d to top... hwnd = 0x%X, Error: %0x%X\n"), 
+				CString msg;
+				msg.Format(_T("Could not bring item %d to top... hwnd = 0x%X, Error: %0x%X\n"),
 					nItem, (int)SelectedWin, GetLastError());
+				AfxMessageBox(msg);
 			}
 		}
 	}
@@ -443,10 +455,14 @@ void CWinSwitchDlg::OnDestroy()
 		ATLVERIFY(UpdateSysTrayIcon(NIM_DELETE));
 		::DestroyIcon(m_hIcon);
 	}
+
+	::UnregisterHotKey(m_hWnd, CATCH_HOTKEY_ID);
 }
 
 void CWinSwitchDlg::ShowAndActivate()
 {
+	RefreshWinList();
+
 	if (!IsWindowVisible() || IsIconic())
 		ShowWindow(SW_SHOWNORMAL);
 
@@ -458,4 +474,50 @@ void CWinSwitchDlg::OnBnClickedCancel()
 {
 	// Don't close the app but just put to background.
 	ShowWindow(SW_HIDE);
+}
+
+
+void CWinSwitchDlg::OnBnClickedButton2()
+{
+	// Exit app for debug.
+	DestroyWindow();
+}
+
+
+void CWinSwitchDlg::OnBnClickedButtonCloseWindow()
+{
+	POSITION pos = m_ctlList.GetFirstSelectedItemPosition();
+	if (pos == NULL)
+	{
+		::MessageBox(this->m_hWnd, _T("No items were selected"), _T("Oops"), MB_OK);
+	}
+	else
+	{
+		while (pos)
+		{
+			int nItem = m_ctlList.GetNextSelectedItem(pos);
+			HWND SelectedWin = (HWND)m_ctlList.GetItemData(nItem);
+
+			::SendMessage(SelectedWin, WM_SYSCOMMAND, SC_CLOSE, 0);
+
+			DWORD err = GetLastError();
+			if (err > 0) {
+				CString msg;
+				msg.Format(_T("Could not close item %d... hwnd = 0x%X, Error: %0x%X\n"),
+					nItem, (int)SelectedWin, err);
+				AfxMessageBox(msg);
+			}
+
+		}
+		RefreshWinList();
+	}
+}
+
+
+void CWinSwitchDlg::OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2)
+{
+	// TODO: Add your message handler code here and/or call default
+	ShowAndActivate();
+
+	CDialogEx::OnHotKey(nHotKeyId, nKey1, nKey2);
 }

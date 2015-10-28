@@ -58,4 +58,7 @@ protected:
 public:
 	afx_msg void OnDestroy();
 	afx_msg void OnBnClickedCancel();
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButtonCloseWindow();
+	afx_msg void OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2);
 };
