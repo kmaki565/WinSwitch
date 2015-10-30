@@ -58,6 +58,7 @@ void CWinSwitchDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_ctlList);
 	DDX_Control(pDX, IDC_CHECK1, m_CheckFullPath);
+	DDX_Control(pDX, IDC_EDIT1, m_Edit1);
 }
 
 BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
@@ -75,6 +76,9 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CWinSwitchDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_WINDOW, &CWinSwitchDlg::OnBnClickedButtonCloseWindow)
 	ON_WM_HOTKEY()
+	ON_EN_UPDATE(IDC_EDIT1, &CWinSwitchDlg::OnEnUpdateEdit1)
+	ON_EN_KILLFOCUS(IDC_EDIT1, &CWinSwitchDlg::OnEnKillfocusEdit1)
+	ON_EN_SETFOCUS(IDC_EDIT2, &CWinSwitchDlg::OnEnSetfocusEdit2)
 END_MESSAGE_MAP()
 
 
@@ -116,11 +120,14 @@ BOOL CWinSwitchDlg::OnInitDialog()
 	UINT	uiMod = MOD_ALT;
 	::RegisterHotKey(m_hWnd, CATCH_HOTKEY_ID, uiMod, uiID);
 
+	m_hAccel = ::LoadAccelerators(::AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR1));
+
 	// Add an icon to taskbar notification area
 	UpdateSysTrayIcon(NIM_ADD);
 
 	(void)m_ctlList.SetExtendedStyle(LVS_EX_FULLROWSELECT);
-	m_ctlList.SetHeadings(_T("Window name,320;Class name,200;Proc name,200"));
+	//m_ctlList.SetHeadings(_T("Window,320;Class,200;Process,200"));
+	m_ctlList.SetHeadings(_T("Process,150;Window,360;Class,200"));
 	m_ctlList.LoadColumnInfo();
 
 	RefreshWinList();
@@ -230,7 +237,8 @@ afx_msg LRESULT CWinSwitchDlg::OnAddItemToWindowList(WPARAM wParam, LPARAM lPara
 		lpProcName = ProcName;
 	}
 
-	ItemIndex = m_ctlList.AddItem(strWindowText, ClassName, lpProcName);
+	//ItemIndex = m_ctlList.AddItem(strWindowText, ClassName, lpProcName);
+	ItemIndex = m_ctlList.AddItem(lpProcName, strWindowText, ClassName);
 	m_ctlList.SetItemData(ItemIndex, (DWORD)hwnd);
 
 	GetAppIcon(hwnd);
@@ -516,8 +524,80 @@ void CWinSwitchDlg::OnBnClickedButtonCloseWindow()
 
 void CWinSwitchDlg::OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2)
 {
-	// TODO: Add your message handler code here and/or call default
 	ShowAndActivate();
 
 	CDialogEx::OnHotKey(nHotKeyId, nKey1, nKey2);
+}
+
+
+void CWinSwitchDlg::OnEnUpdateEdit1()
+{
+	CString Input1;
+	m_Edit1.GetWindowText(Input1);
+	// TODO: Real time update
+}
+
+
+void CWinSwitchDlg::OnEnKillfocusEdit1()
+{
+	CString Input1;
+	m_Edit1.GetWindowText(Input1);
+
+//	UpdateLvByInput1(Input1);
+}
+
+//BOOL CWinSwitchDlg::PreTranslateMessage(MSG* pMsg)
+//{
+//	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB)
+//	{
+//		CWnd* pFocusWnd = GetFocus();
+//
+//		if (pFocusWnd != NULL && pFocusWnd->GetDlgCtrlID() == IDC_EDIT1)
+//		{
+//			CString Input1;
+//			m_Edit1.GetWindowText(Input1);
+//			UpdateLvByInput1(Input1);
+//		}
+//	}
+//	return CDialog::PreTranslateMessage(pMsg);
+//}
+
+
+// Keep only items in Lv which matches the input1 and delete otherwise
+void CWinSwitchDlg::UpdateLvByInput1(CString Input1)
+{
+	if (Input1.IsEmpty()) return;
+
+	int nItem;
+
+	for (nItem = 0; nItem < m_ctlList.GetItemCount(); nItem++) {
+		TCHAR ProcessName[100];
+		m_ctlList.GetItemText(nItem, 2, ProcessName, 100);
+		CString ProcName = ProcessName;
+
+		if (ProcName.Find(Input1) == -1) {
+			// No match
+			m_ctlList.DeleteItem(nItem);
+			m_ImageList.Remove(nItem);
+
+		}
+		//TRACE(_T("%s\n"), ProcessName);
+	}
+
+}
+
+
+void CWinSwitchDlg::OnEnSetfocusEdit2()
+{
+	CString Input1;
+	m_Edit1.GetWindowText(Input1);
+//	UpdateLvByInput1(Input1);
+}
+
+
+BOOL CWinSwitchDlg::PreTranslateMessage(MSG* pMsg)
+{
+	::TranslateAccelerator(m_hWnd, m_hAccel, pMsg);
+
+	return CDialog::PreTranslateMessage(pMsg);
 }

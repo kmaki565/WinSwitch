@@ -53,6 +53,7 @@ public:
 	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
 	CButton m_CheckFullPath;
 	afx_msg void OnBnClickedCheck1();
+//	virtual BOOL PreTranslateMessage(MSG* pMsg);
 protected:
 	afx_msg LRESULT OnSysTrayNotify(WPARAM wParam, LPARAM lParam);
 public:
@@ -61,4 +62,15 @@ public:
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButtonCloseWindow();
 	afx_msg void OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2);
+	afx_msg void OnEnUpdateEdit1();
+	CEdit m_Edit1;
+	afx_msg void OnEnKillfocusEdit1();
+protected:
+	// Keep only items in Lv which matches the input1
+	void UpdateLvByInput1(CString Input1);
+public:
+	afx_msg void OnEnSetfocusEdit2();
+	// Handle of the accelerators
+	HACCEL m_hAccel;
+	BOOL PreTranslateMessage(MSG* pMsg);
 };
