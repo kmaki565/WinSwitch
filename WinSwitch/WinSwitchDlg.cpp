@@ -77,8 +77,7 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_CLOSE_WINDOW, &CWinSwitchDlg::OnBnClickedButtonCloseWindow)
 	ON_WM_HOTKEY()
 	ON_EN_UPDATE(IDC_EDIT1, &CWinSwitchDlg::OnEnUpdateEdit1)
-	ON_EN_KILLFOCUS(IDC_EDIT1, &CWinSwitchDlg::OnEnKillfocusEdit1)
-	ON_EN_SETFOCUS(IDC_EDIT2, &CWinSwitchDlg::OnEnSetfocusEdit2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CWinSwitchDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -127,7 +126,7 @@ BOOL CWinSwitchDlg::OnInitDialog()
 
 	(void)m_ctlList.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 	//m_ctlList.SetHeadings(_T("Window,320;Class,200;Process,200"));
-	m_ctlList.SetHeadings(_T("Process,150;Window,360;Class,200"));
+	m_ctlList.SetHeadings(_T("Process (F2 to sort),150;Window,360;Class,200"));
 	m_ctlList.LoadColumnInfo();
 
 	RefreshWinList();
@@ -343,7 +342,7 @@ void CWinSwitchDlg::OnBnClickedButton1()
 void CWinSwitchDlg::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	// TODO: Add your control notification handler code here
+	
 	OnBnClickedShow();
 
 	*pResult = 0;
@@ -475,6 +474,11 @@ void CWinSwitchDlg::ShowAndActivate()
 		ShowWindow(SW_SHOWNORMAL);
 
 	::SetForegroundWindow(m_hWnd);
+
+	// Set focus to the list
+	::SendMessage(m_hWnd, WM_NEXTDLGCTL, (WPARAM)::GetDlgItem(m_hWnd, IDC_LIST1), TRUE);
+	//::SetFocus(::GetDlgItem(m_hWnd, IDC_LIST1));
+
 }
 
 
@@ -538,13 +542,13 @@ void CWinSwitchDlg::OnEnUpdateEdit1()
 }
 
 
-void CWinSwitchDlg::OnEnKillfocusEdit1()
-{
-	CString Input1;
-	m_Edit1.GetWindowText(Input1);
-
+//void CWinSwitchDlg::OnEnKillfocusEdit1()
+//{
+//	CString Input1;
+//	m_Edit1.GetWindowText(Input1);
+//
 //	UpdateLvByInput1(Input1);
-}
+//}
 
 //BOOL CWinSwitchDlg::PreTranslateMessage(MSG* pMsg)
 //{
@@ -563,36 +567,37 @@ void CWinSwitchDlg::OnEnKillfocusEdit1()
 //}
 
 
-// Keep only items in Lv which matches the input1 and delete otherwise
-void CWinSwitchDlg::UpdateLvByInput1(CString Input1)
+void CWinSwitchDlg::FindNextByWindowTitle(CString Input1, int StartItem)
 {
 	if (Input1.IsEmpty()) return;
 
-	int nItem;
+	int nItem = StartItem;
 
-	for (nItem = 0; nItem < m_ctlList.GetItemCount(); nItem++) {
-		TCHAR ProcessName[100];
-		m_ctlList.GetItemText(nItem, 2, ProcessName, 100);
-		CString ProcName = ProcessName;
+	while (nItem < m_ctlList.GetItemCount())
+	{
+		CString WindowTitle = m_ctlList.GetItemText(nItem, 1);
 
-		if (ProcName.Find(Input1) == -1) {
-			// No match
-			m_ctlList.DeleteItem(nItem);
-			m_ImageList.Remove(nItem);
+		WindowTitle.MakeLower();
+		Input1.MakeLower();
 
+		if (WindowTitle.Find(Input1) >= 0) {
+			// Match
+			m_ctlList.SetItemState(nItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+			m_ctlList.EnsureVisible(nItem, FALSE);
+			break;
 		}
-		//TRACE(_T("%s\n"), ProcessName);
+		nItem++;
 	}
 
 }
 
 
-void CWinSwitchDlg::OnEnSetfocusEdit2()
-{
-	CString Input1;
-	m_Edit1.GetWindowText(Input1);
+//void CWinSwitchDlg::OnEnSetfocusEdit2()
+//{
+//	CString Input1;
+//	m_Edit1.GetWindowText(Input1);
 //	UpdateLvByInput1(Input1);
-}
+//}
 
 
 BOOL CWinSwitchDlg::PreTranslateMessage(MSG* pMsg)
@@ -600,4 +605,30 @@ BOOL CWinSwitchDlg::PreTranslateMessage(MSG* pMsg)
 	::TranslateAccelerator(m_hWnd, m_hAccel, pMsg);
 
 	return CDialog::PreTranslateMessage(pMsg);
+}
+
+void CWinSwitchDlg::ClearSelections()
+{
+	int id = m_ctlList.GetNextItem(-1, LVNI_SELECTED);
+	if (id != -1)
+		m_ctlList.SetItemState(id, 0, LVIS_FOCUSED | LVIS_SELECTED);
+}
+
+void CWinSwitchDlg::OnBnClickedButton3()
+{
+	CString Input1;
+	m_Edit1.GetWindowText(Input1);
+
+	int StartItem;
+	POSITION p = m_ctlList.GetFirstSelectedItemPosition();
+	if (!p) {
+		StartItem = 0;
+	}
+	else {
+		StartItem = m_ctlList.GetNextSelectedItem(p) + 1;
+	}
+
+	ClearSelections();
+
+	FindNextByWindowTitle(Input1, StartItem);
 }

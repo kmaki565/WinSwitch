@@ -15,7 +15,7 @@
 
 BEGIN_MESSAGE_MAP(CWinSwitchApp, CWinApp)
 // No help
-	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+//	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 

@@ -64,13 +64,14 @@ public:
 	afx_msg void OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2);
 	afx_msg void OnEnUpdateEdit1();
 	CEdit m_Edit1;
-	afx_msg void OnEnKillfocusEdit1();
+//	afx_msg void OnEnKillfocusEdit1();
 protected:
-	// Keep only items in Lv which matches the input1
-	void UpdateLvByInput1(CString Input1);
+	void FindNextByWindowTitle(CString Input1, int StartItem);
+	void ClearSelections();
 public:
-	afx_msg void OnEnSetfocusEdit2();
+//	afx_msg void OnEnSetfocusEdit2();
 	// Handle of the accelerators
 	HACCEL m_hAccel;
 	BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnBnClickedButton3();
 };
