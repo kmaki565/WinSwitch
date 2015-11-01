@@ -78,6 +78,7 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_WM_HOTKEY()
 	ON_EN_UPDATE(IDC_EDIT1, &CWinSwitchDlg::OnEnUpdateEdit1)
 	ON_BN_CLICKED(IDC_BUTTON3, &CWinSwitchDlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4_SORT, &CWinSwitchDlg::OnBnClickedButton4Sort)
 END_MESSAGE_MAP()
 
 
@@ -126,7 +127,7 @@ BOOL CWinSwitchDlg::OnInitDialog()
 
 	(void)m_ctlList.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 	//m_ctlList.SetHeadings(_T("Window,320;Class,200;Process,200"));
-	m_ctlList.SetHeadings(_T("Process (F2 to sort),150;Window,360;Class,200"));
+	m_ctlList.SetHeadings(_T("Process (F2 to sort),160;Window,360;Class,180"));
 	m_ctlList.LoadColumnInfo();
 
 	RefreshWinList();
@@ -631,4 +632,18 @@ void CWinSwitchDlg::OnBnClickedButton3()
 	ClearSelections();
 
 	FindNextByWindowTitle(Input1, StartItem);
+}
+
+
+void CWinSwitchDlg::OnBnClickedButton4Sort()
+{
+	NMLISTVIEW nmlv;
+	::memset(&nmlv, 0, sizeof(NMLISTVIEW));
+
+	nmlv.iSubItem = 0;  // Sort first column
+	nmlv.hdr.code = LVN_COLUMNCLICK;    // Emulate column click
+	nmlv.hdr.idFrom = ::GetDlgCtrlID(m_ctlList.m_hWnd);
+	nmlv.hdr.hwndFrom = m_ctlList.m_hWnd;
+
+	::SendMessage(m_hWnd, WM_NOTIFY, nmlv.hdr.idFrom, (LPARAM)&nmlv);
 }

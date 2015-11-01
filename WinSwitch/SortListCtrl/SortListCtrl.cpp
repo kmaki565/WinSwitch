@@ -307,6 +307,12 @@ void CSortListCtrl::Sort( int iColumn, BOOL bAscending )
 	m_ctlHeader.SetSortArrow( m_iSortColumn, m_bSortAscending );
 
 	VERIFY( SortItems( CompareFunction, reinterpret_cast<DWORD>( this ) ) );
+
+	//@KM
+	POSITION p = GetFirstSelectedItemPosition();
+	if (p) {
+		EnsureVisible(GetNextSelectedItem(p), FALSE);
+	}
 }
 
 
