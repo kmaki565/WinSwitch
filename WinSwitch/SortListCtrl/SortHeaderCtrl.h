@@ -53,6 +53,8 @@ protected:
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
+public:
+	void ClearSortArrow(int iSortColumn);
 };
 
 //{{AFX_INSERT_LOCATION}}

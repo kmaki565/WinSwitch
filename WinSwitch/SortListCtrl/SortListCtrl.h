@@ -82,6 +82,8 @@ protected:
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
+public:
+	void ClearSortArrow(int iColumn);
 };
 
 //{{AFX_INSERT_LOCATION}}

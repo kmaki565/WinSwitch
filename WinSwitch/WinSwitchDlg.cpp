@@ -199,9 +199,15 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lp) {
 void CWinSwitchDlg::RefreshWinList()
 {
 	m_ctlList.DeleteAllItems();
-	m_ImageList.DeleteImageList();
 
+	for (int iColumn = 0; iColumn < 3; iColumn++)		// Assume 3 columns in the list
+	{
+		m_ctlList.ClearSortArrow(iColumn);
+	}
+
+	m_ImageList.DeleteImageList();
 	m_ImageList.Create(16, 16, ILC_MASK | ILC_COLOR24, 1, 1);
+
 	::EnumWindows((WNDENUMPROC)EnumWindowsProc, (LPARAM)this->m_hWnd);
 
 	m_ctlList.SetImageList(&m_ImageList, LVSIL_SMALL);

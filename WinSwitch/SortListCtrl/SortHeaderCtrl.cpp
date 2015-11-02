@@ -202,3 +202,18 @@ void CSortHeaderCtrl::Serialize( CArchive& ar )
 		}
 	}
 }
+
+
+void CSortHeaderCtrl::ClearSortArrow(int iSortColumn)
+{
+	// change the item to NOT owner drawn.
+	HD_ITEM hditem;
+
+	hditem.mask = HDI_FORMAT;
+	VERIFY(GetItem(iSortColumn, &hditem));
+	hditem.fmt &= ~HDF_OWNERDRAW;
+	VERIFY(SetItem(iSortColumn, &hditem));
+
+	// invalidate the header control so it gets redrawn
+	Invalidate();
+}

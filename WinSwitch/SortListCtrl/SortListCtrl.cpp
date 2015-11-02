@@ -429,3 +429,9 @@ LPTSTR* CSortListCtrl::GetTextArray( int iItem ) const
 	ItemData* pid = reinterpret_cast<ItemData*>( CListCtrl::GetItemData( iItem ) );
 	return pid->arrpsz;
 }
+
+
+void CSortListCtrl::ClearSortArrow(int iColumn)
+{
+	m_ctlHeader.ClearSortArrow(iColumn);
+}
