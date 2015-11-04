@@ -207,10 +207,10 @@ void CWinSwitchDlg::RefreshWinList()
 
 	m_ImageList.DeleteImageList();
 	m_ImageList.Create(16, 16, ILC_MASK | ILC_COLOR24, 1, 1);
+	m_ctlList.SetImageList(&m_ImageList, LVSIL_SMALL);
 
 	::EnumWindows((WNDENUMPROC)EnumWindowsProc, (LPARAM)this->m_hWnd);
 
-	m_ctlList.SetImageList(&m_ImageList, LVSIL_SMALL);
 }
 
 
@@ -218,8 +218,7 @@ afx_msg LRESULT CWinSwitchDlg::OnAddItemToWindowList(WPARAM wParam, LPARAM lPara
 {
 	TCHAR strWindowText[1024], ClassName[1024];
 	HWND hwnd = (HWND)wParam;
-	int ItemIndex;
-	//int iImage;
+	int ItemIndex, IconIndex;
 
 	::GetWindowText(hwnd, strWindowText, sizeof(strWindowText));
 	::GetClassName(hwnd, ClassName, sizeof(ClassName));
@@ -243,17 +242,14 @@ afx_msg LRESULT CWinSwitchDlg::OnAddItemToWindowList(WPARAM wParam, LPARAM lPara
 		lpProcName = ProcName;
 	}
 
-	//ItemIndex = m_ctlList.AddItem(strWindowText, ClassName, lpProcName);
 	ItemIndex = m_ctlList.AddItem(lpProcName, strWindowText, ClassName);
 	m_ctlList.SetItemData(ItemIndex, (DWORD)hwnd);
 
-	GetAppIcon(hwnd);
-	LVITEM  listitem;
-	listitem.iItem = ItemIndex;
-	listitem.mask = LVIF_IMAGE;
-	listitem.iImage = ItemIndex;
-	m_ctlList.SetItem(&listitem);
-
+	IconIndex = GetAppIcon(hwnd);
+	if (IconIndex != -1) {
+		m_ctlList.SetItem(ItemIndex, 0, LVIF_IMAGE, NULL, IconIndex, 0, 0, 0);
+	}
+	
 	return 0;
 }
 
@@ -280,27 +276,29 @@ BOOL CWinSwitchDlg::GetProcessNameByWindowHandle(HWND hwnd, LPTSTR ProcName)
 	return ret;
 }
 
-void CWinSwitchDlg::GetAppIcon(HWND hwnd)
+int CWinSwitchDlg::GetAppIcon(HWND hwnd)
 {
 	HICON hIcon;
+	int IconIndex;
 
+	// First method
 	SendMessageTimeout(hwnd, WM_GETICON, ICON_SMALL, 0, SMTO_ABORTIFHUNG, 300, (DWORD *)&hIcon);
 	//hIcon = (HICON)SendMessage(hWnd, WM_GETICON, wIconType, 0);
 
-	if (hIcon == NULL)
+	if (hIcon == NULL) {
+		// Second method
 		hIcon = (HICON)GetClassLong(hwnd, GCL_HICONSM);
+	}
 
-	if (hIcon != NULL)
-	{
-		m_ImageList.Add(hIcon);
-	}
-	else
-	{
+	if (hIcon == NULL) {
 		// Use default icon
-		if ((hIcon = AfxGetApp()->LoadIcon(IDI_ICON1)) != NULL)
-			m_ImageList.Add(hIcon);
+		hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
 	}
-	return;
+
+	IconIndex = m_ImageList.Add(hIcon);
+	//MyOutputDebugString(_T("IconIndex %d\n"), IconIndex);
+
+	return IconIndex;
 }
 
 

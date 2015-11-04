@@ -41,7 +41,7 @@ public:
 	void RefreshWinList();
 protected:
 	afx_msg LRESULT OnAddItemToWindowList(WPARAM wParam, LPARAM lParam);
-	void GetAppIcon(HWND hwnd);
+	int GetAppIcon(HWND hwnd);
 	BOOL GetProcessNameByWindowHandle(HWND hwnd, LPTSTR ProcName);
 	bool UpdateSysTrayIcon(DWORD dwAction);
 	int ShowContextMenu(void);

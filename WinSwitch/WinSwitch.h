@@ -16,6 +16,13 @@
 #define ADD_ITEM_TO_WINDOW_LIST (WM_APP + 0)
 #define WM_SYSTRAYNOTIFY (WM_APP + 1)
 
+#define MyOutputDebugString( str, ... ) \
+	  { \
+	  TCHAR c[256]; \
+	  _stprintf_s(c, str, __VA_ARGS__); \
+	  OutputDebugString(c); \
+	  }
+
 // CWinSwitchApp:
 // See WinSwitch.cpp for the implementation of this class
 //
