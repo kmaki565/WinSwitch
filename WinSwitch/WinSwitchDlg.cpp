@@ -59,6 +59,7 @@ void CWinSwitchDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST1, m_ctlList);
 	DDX_Control(pDX, IDC_CHECK1, m_CheckFullPath);
 	DDX_Control(pDX, IDC_EDIT1, m_Edit1);
+	DDX_Control(pDX, IDC_CHECK2_MAX, m_checkMax);
 }
 
 BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
@@ -315,24 +316,38 @@ void CWinSwitchDlg::OnBnClickedShow()
 		{
 			int nItem = m_ctlList.GetNextSelectedItem(pos);
 			HWND SelectedWin = (HWND)m_ctlList.GetItemData(nItem);
-			// Bring to top
-			if (::IsIconic(SelectedWin)) {
-				// Instead of ::ShowWindow(SelectedWin, SW_RESTORE);,
-				// This works on Admin process window
-				//
-				::SendMessage(SelectedWin, WM_SYSCOMMAND, SC_RESTORE, 0);
+
+			if (m_checkMax.GetCheck() == BST_CHECKED)
+			{
+				::SendMessage(SelectedWin, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
 			}
+			else
+			{
+				if (::IsIconic(SelectedWin))
+				{
+					// Instead of ::ShowWindow(SelectedWin, SW_RESTORE);,
+					// This works on Admin process window
+					//
+					::SendMessage(SelectedWin, WM_SYSCOMMAND, SC_RESTORE, 0);
+				}
+			}
+			//
+			// Bring to top
+			//
 			//if (::SetWindowPos(SelectedWin, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE)) {
-			if (::SetForegroundWindow(SelectedWin)) {
+			if (::SetForegroundWindow(SelectedWin))
+			{
 				// If showing up the windows is successful, hide this dialog
 				ShowWindow(SW_HIDE);
 			}
-			else {
+			else
+			{
 				CString msg;
 				msg.Format(_T("Could not bring item %d to top... hwnd = 0x%X, Error: %0x%X\n"),
 					nItem, (int)SelectedWin, GetLastError());
 				AfxMessageBox(msg);
 			}
+
 		}
 	}
 }

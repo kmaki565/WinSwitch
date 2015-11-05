@@ -75,4 +75,5 @@ public:
 	BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnBnClickedButton4Sort();
+	CButton m_checkMax;
 };
