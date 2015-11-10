@@ -37,6 +37,7 @@ public:
 	CSortListCtrl m_ctlList;
 private:
 	CImageList m_ImageList;
+	static UINT s_uTaskbarRestart;
 public:
 	void RefreshWinList();
 protected:
@@ -56,6 +57,7 @@ public:
 //	virtual BOOL PreTranslateMessage(MSG* pMsg);
 protected:
 	afx_msg LRESULT OnSysTrayNotify(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnTaskbarRestart(WPARAM wParam, LPARAM lParam);
 public:
 	afx_msg void OnDestroy();
 	afx_msg void OnBnClickedCancel();

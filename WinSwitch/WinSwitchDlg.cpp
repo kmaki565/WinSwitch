@@ -45,6 +45,8 @@ END_MESSAGE_MAP()
 
 // CWinSwitchDlg dialog
 
+// static
+UINT CWinSwitchDlg::s_uTaskbarRestart = ::RegisterWindowMessage(_T("TaskbarCreated"));
 
 
 CWinSwitchDlg::CWinSwitchDlg(CWnd* pParent /*=NULL*/)
@@ -66,7 +68,7 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_MESSAGE(ADD_ITEM_TO_WINDOW_LIST, &CWinSwitchDlg::OnAddItemToWindowList)
+    ON_MESSAGE(ADD_ITEM_TO_WINDOW_LIST, &CWinSwitchDlg::OnAddItemToWindowList)
 	ON_BN_CLICKED(IDSHOW, &CWinSwitchDlg::OnBnClickedShow)
 	ON_BN_CLICKED(IDC_BUTTON1, &CWinSwitchDlg::OnBnClickedButton1)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST1, &CWinSwitchDlg::OnNMDblclkList1)
@@ -80,6 +82,7 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_EN_UPDATE(IDC_EDIT1, &CWinSwitchDlg::OnEnUpdateEdit1)
 	ON_BN_CLICKED(IDC_BUTTON3, &CWinSwitchDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4_SORT, &CWinSwitchDlg::OnBnClickedButton4Sort)
+	ON_REGISTERED_MESSAGE(s_uTaskbarRestart, &CWinSwitchDlg::OnTaskbarRestart)
 END_MESSAGE_MAP()
 
 
@@ -666,3 +669,10 @@ void CWinSwitchDlg::OnBnClickedButton4Sort()
 
 	::SendMessage(m_hWnd, WM_NOTIFY, nmlv.hdr.idFrom, (LPARAM)&nmlv);
 }
+
+
+afx_msg LRESULT CWinSwitchDlg::OnTaskbarRestart(WPARAM wParam, LPARAM lParam)
+{
+	return (UpdateSysTrayIcon(NIM_ADD) ? 0L : -1L);
+}
+

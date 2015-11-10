@@ -125,6 +125,7 @@
     <ResourceCompile Include="WinSwitch.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Readme.org" />
     <None Include="res\WinSwitch.rc2" />
   </ItemGroup>
   <ItemGroup>
