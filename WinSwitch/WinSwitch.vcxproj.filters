@@ -75,5 +75,8 @@
     <Image Include="res\DefaultAppIcon.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\..\Downloads\window-icon-gui-clip-art\window-icon-gui-clip-art\Window_Icon_Gui_clip_art_hight.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

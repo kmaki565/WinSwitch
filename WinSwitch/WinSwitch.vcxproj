@@ -129,6 +129,7 @@
     <None Include="res\WinSwitch.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\..\Downloads\window-icon-gui-clip-art\window-icon-gui-clip-art\Window_Icon_Gui_clip_art_hight.ico" />
     <Image Include="res\DefaultAppIcon.ico" />
     <Image Include="res\WinSwitch.ico" />
   </ItemGroup>
