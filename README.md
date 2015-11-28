@@ -2,6 +2,7 @@ WinSwitch
 ====
 A keyboard based window switching tool  
 
+![Screenshot](https://raw.github.com/wiki/kmaki565/WinSwitch/images/WinSwitchScrShot.png)
 ## Goal for the program
 I often open a lot of windows and keep them open. Sometimes the taskbar is full of window icons to overflow (I usually set the taskbar to the right side of desktop, and I would see a scroll bar in the taskbar). In such a scenario, I am frustrated that I have to move mouse cursor carefully to the icons to reach desired window. I can use Alt-tab, but yet I have to carefully watch the list of windows and find the target.
 This tiny program is aimed to offer a relief for such scenario, enabling to choose window(s) with fewer keyboard types.
