@@ -1,3 +1,4 @@
+#+AUTHOR: kmaki565
 * Program name
 WinSwitch.exe
 * Program summary
@@ -5,7 +6,7 @@ A keyboard based window switching tool (Alt-TAB replacement)
 * Build environment
 Visual Studio Professional 2013
 * Dependencies
-mfc120u.dll
+mfc120u.dll (Visual C++ 2013 Redistributable x86)
 * Program description
 
 When launched, the exe stays in the taskbar notification area.
