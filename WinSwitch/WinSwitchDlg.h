@@ -38,10 +38,12 @@ public:
 private:
 	CImageList m_ImageList;
 	static UINT s_uTaskbarRestart;
+	BOOL m_ForceHidden;
 public:
 	void RefreshWinList();
 protected:
 	afx_msg LRESULT OnAddItemToWindowList(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
 	int GetAppIcon(HWND hwnd);
 	BOOL GetProcessNameByWindowHandle(HWND hwnd, LPTSTR ProcName);
 	bool UpdateSysTrayIcon(DWORD dwAction);

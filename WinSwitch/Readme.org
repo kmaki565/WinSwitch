@@ -2,13 +2,17 @@
 * Program name
 WinSwitch.exe
 * Program summary
-A keyboard based window switching tool (Alt-TAB replacement)
+A keyboard based window switching tool
+* Goal for the program
+I often open a lot of windows and keep them open. Sometimes the taskbar is full of window icons to overflow (I usually set the taskbar to the right side of desktop, and I would see a scroll bar in the taskbar). In such a scenario, I am frustrated that I have to move mouse cursor carefully to the icons to reach desired window. I can use Alt-tab, but yet I have to carefully watch the list of windows and find the target.
+This tiny program is aimed to offer a relief for such scenario, by selecting window(s) with fewer keyboard types.
+* Works on...
+Windows 7 or later (tested on Windows 10)
 * Build environment
 Visual Studio Professional 2013
 * Dependencies
-mfc120u.dll (Visual C++ 2013 Redistributable x86)
+Microsoft Visual C++ 2013 Redistributable (x86)
 * Program description
-
 When launched, the exe stays in the taskbar notification area.
 It registers a hotkey (Alt+F1) during startup and unregisters it upon program termination.
 

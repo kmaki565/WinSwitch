@@ -83,6 +83,7 @@ BEGIN_MESSAGE_MAP(CWinSwitchDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CWinSwitchDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4_SORT, &CWinSwitchDlg::OnBnClickedButton4Sort)
 	ON_REGISTERED_MESSAGE(s_uTaskbarRestart, &CWinSwitchDlg::OnTaskbarRestart)
+	ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
 
@@ -136,7 +137,29 @@ BOOL CWinSwitchDlg::OnInitDialog()
 
 	RefreshWinList();
 
+	CString CmdArg = ::AfxGetApp()->m_lpCmdLine;
+	CmdArg.Left(2);
+
+	if (CmdArg == _T("-h") || CmdArg == _T("/h"))
+	{
+		m_ForceHidden = TRUE;
+	}
+	else 
+	{
+		m_ForceHidden = FALSE;
+	}
+
 	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+void CWinSwitchDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
+{
+	// To hide the window at startup
+	if (m_ForceHidden) {
+		lpwndpos->flags &= ~SWP_SHOWWINDOW;
+	}
+
+	CDialog::OnWindowPosChanging(lpwndpos);
 }
 
 void CWinSwitchDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -491,6 +514,8 @@ void CWinSwitchDlg::OnDestroy()
 
 void CWinSwitchDlg::ShowAndActivate()
 {
+	m_ForceHidden = FALSE;
+
 	RefreshWinList();
 
 	if (!IsWindowVisible() || IsIconic())
