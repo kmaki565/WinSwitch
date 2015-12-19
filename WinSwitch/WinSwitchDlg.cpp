@@ -518,6 +518,8 @@ void CWinSwitchDlg::ShowAndActivate()
 
 	RefreshWinList();
 
+	m_checkMax.SetCheck(BST_UNCHECKED);
+
 	if (!IsWindowVisible() || IsIconic())
 		ShowWindow(SW_SHOWNORMAL);
 
