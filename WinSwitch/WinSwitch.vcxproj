@@ -131,6 +131,9 @@
   <ItemGroup>
     <Image Include="..\..\..\..\..\Downloads\window-icon-gui-clip-art\window-icon-gui-clip-art\Window_Icon_Gui_clip_art_hight.ico" />
     <Image Include="res\DefaultAppIcon.ico" />
+    <Image Include="res\loading.ico" />
+    <Image Include="res\Window_Icon_Gui_clip_art_hight-Red.ico" />
+    <Image Include="res\Window_Icon_Gui_clip_art_hight.ico" />
     <Image Include="res\WinSwitch.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

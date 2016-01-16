@@ -46,7 +46,7 @@ protected:
 	afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
 	int GetAppIcon(HWND hwnd);
 	BOOL GetProcessNameByWindowHandle(HWND hwnd, LPTSTR ProcName);
-	bool UpdateSysTrayIcon(DWORD dwAction);
+	bool UpdateSysTrayIcon(DWORD dwAction, BOOL IsLoading = FALSE);
 	int ShowContextMenu(void);
 	void HandleContextCommand(int nCmd);
 	void ShowAndActivate();

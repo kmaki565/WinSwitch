@@ -225,6 +225,8 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lp) {
 
 void CWinSwitchDlg::RefreshWinList()
 {
+    UpdateSysTrayIcon(NIM_MODIFY, TRUE);
+    
 	m_ctlList.DeleteAllItems();
 
 	for (int iColumn = 0; iColumn < 3; iColumn++)		// Assume 3 columns in the list
@@ -238,6 +240,7 @@ void CWinSwitchDlg::RefreshWinList()
 
 	::EnumWindows((WNDENUMPROC)EnumWindowsProc, (LPARAM)this->m_hWnd);
 
+    UpdateSysTrayIcon(NIM_MODIFY, FALSE);
 }
 
 
@@ -400,7 +403,7 @@ void CWinSwitchDlg::OnBnClickedCheck1()
 	RefreshWinList();
 }
 
-bool CWinSwitchDlg::UpdateSysTrayIcon(DWORD dwAction)
+bool CWinSwitchDlg::UpdateSysTrayIcon(DWORD dwAction, BOOL IsLoading)
 {
 	NOTIFYICONDATA nid = { 0 };
 	nid.cbSize = sizeof(NOTIFYICONDATA);
@@ -411,6 +414,11 @@ bool CWinSwitchDlg::UpdateSysTrayIcon(DWORD dwAction)
 	switch (dwAction)
 	{
 	case NIM_MODIFY:
+		if (IsLoading)
+			m_hIcon = AfxGetApp()->LoadIcon(IDI_ICON3);
+		else
+			m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+        // fall through
 	case NIM_ADD:
 	{
 		nid.uFlags |= NIF_TIP | NIF_ICON | NIF_MESSAGE;

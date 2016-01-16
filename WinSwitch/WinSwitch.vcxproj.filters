@@ -78,5 +78,14 @@
     <Image Include="..\..\..\..\..\Downloads\window-icon-gui-clip-art\window-icon-gui-clip-art\Window_Icon_Gui_clip_art_hight.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\Window_Icon_Gui_clip_art_hight-Red.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Window_Icon_Gui_clip_art_hight.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\loading.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
