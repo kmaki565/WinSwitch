@@ -7,7 +7,7 @@ A keyboard based window switching tool
 I often open a lot of windows and keep them open. Sometimes the taskbar is full of window icons to overflow (I usually set the taskbar to the right side of desktop, and I would see a scroll bar in the taskbar). In such a scenario, I am frustrated that I have to move mouse cursor carefully to the icons to reach desired window. I can use Alt-tab, but yet I have to carefully watch the list of windows and find the target.
 This tiny program is aimed to offer a relief for such scenario, enabling to choose window(s) with fewer keyboard types.
 ## Works on
-Windows 7 or later (tested on Windows 10)
+Windows 7 or later (tested on Windows 10 x64)
 ## Installation
 None. Just double click WinSwitch.exe. You may want to run as a startup program.
 ## Dependencies
