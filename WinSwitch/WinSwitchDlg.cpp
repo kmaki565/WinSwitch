@@ -121,13 +121,10 @@ BOOL CWinSwitchDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 
 	// RegisterHotKey to show this dialog
-	UINT	uiID = VK_F1;
-	UINT	uiMod = MOD_ALT;
+	// Use Alt+F1 to avoid conflict with RS1...
+	UINT uiID = VK_F1;
+	UINT uiMod = MOD_ALT;
 	::RegisterHotKey(m_hWnd, HOTKEY_OPEN_WINSWITCH, uiMod, uiID);
-	// RegisterHotKey to launch command prompt
-	uiID = 0x46;	// F key
-	uiMod = MOD_WIN;
-	::RegisterHotKey(m_hWnd, HOTKEY_COMMAND_PROMPT, uiMod, uiID);
 
 	m_hAccel = ::LoadAccelerators(::AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR1));
 
@@ -522,7 +519,7 @@ void CWinSwitchDlg::OnDestroy()
 	}
 
 	::UnregisterHotKey(m_hWnd, HOTKEY_OPEN_WINSWITCH);
-	::UnregisterHotKey(m_hWnd, HOTKEY_COMMAND_PROMPT);
+	//::UnregisterHotKey(m_hWnd, HOTKEY_COMMAND_PROMPT);
 }
 
 void CWinSwitchDlg::ShowAndActivate()
@@ -596,10 +593,10 @@ void CWinSwitchDlg::OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2)
 		ShowAndActivate();
 	}
 
-	if (nHotKeyId == HOTKEY_COMMAND_PROMPT)
-	{
-		ShellExecute(NULL, _T("open"), _T("cmd.exe"), _T("/k cd %HOME%"), NULL, SW_SHOWNORMAL);
-	}
+	//if (nHotKeyId == HOTKEY_COMMAND_PROMPT)
+	//{
+	//	ShellExecute(NULL, _T("open"), _T("cmd.exe"), _T("/k cd %HOME%"), NULL, SW_SHOWNORMAL);
+	//}
 
 	CDialogEx::OnHotKey(nHotKeyId, nKey1, nKey2);
 }
