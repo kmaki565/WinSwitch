@@ -7,10 +7,6 @@
 #include "WinSwitchDlg.h"
 #include "afxdialogex.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 
 // CAboutDlg dialog used for App About
 
@@ -519,7 +515,6 @@ void CWinSwitchDlg::OnDestroy()
 	}
 
 	::UnregisterHotKey(m_hWnd, HOTKEY_OPEN_WINSWITCH);
-	//::UnregisterHotKey(m_hWnd, HOTKEY_COMMAND_PROMPT);
 }
 
 void CWinSwitchDlg::ShowAndActivate()
@@ -592,11 +587,6 @@ void CWinSwitchDlg::OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2)
 	{
 		ShowAndActivate();
 	}
-
-	//if (nHotKeyId == HOTKEY_COMMAND_PROMPT)
-	//{
-	//	ShellExecute(NULL, _T("open"), _T("cmd.exe"), _T("/k cd %HOME%"), NULL, SW_SHOWNORMAL);
-	//}
 
 	CDialogEx::OnHotKey(nHotKeyId, nKey1, nKey2);
 }
@@ -720,4 +710,3 @@ afx_msg LRESULT CWinSwitchDlg::OnTaskbarRestart(WPARAM wParam, LPARAM lParam)
 {
 	return (UpdateSysTrayIcon(NIM_ADD) ? 0L : -1L);
 }
-

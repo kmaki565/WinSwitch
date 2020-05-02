@@ -12,7 +12,6 @@
 
 #define MY_WNDCLS_NAME _T("WinSwitchWndClass")
 #define HOTKEY_OPEN_WINSWITCH		1
-#define HOTKEY_COMMAND_PROMPT		2
 
 #define ADD_ITEM_TO_WINDOW_LIST (WM_APP + 0)
 #define WM_SYSTRAYNOTIFY (WM_APP + 1)
