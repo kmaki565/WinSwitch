@@ -10,10 +10,8 @@ This tiny program is aimed to offer a relief for such scenario, enabling to choo
 Windows 7 or later (tested on Windows 10 x64)
 ## Installation
 None. Just double click WinSwitch.exe. You may want to run as a startup program.
-## Dependencies
-Microsoft Visual C++ 2013 Redistributable (x86)
 ## Build environment
-Visual Studio Professional 2013
+Visual Studio 2017
 ## Program description / Usage
 When launched, the exe stays in the taskbar notification area.
 It registers a hotkey (Alt+F1) during startup and unregisters it upon program termination.
