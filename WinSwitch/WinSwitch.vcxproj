@@ -97,9 +97,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SortListCtrl\SortHeaderCtrl.h" />
     <ClInclude Include="SortListCtrl\SortListCtrl.h" />
