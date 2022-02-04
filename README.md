@@ -11,7 +11,7 @@ Windows 7 or later (tested on Windows 10 x64)
 ## Installation
 None. Just double click WinSwitch.exe. You may want to run as a startup program.
 ## Build environment
-Visual Studio 2017
+Visual Studio 2019
 ## Program description / Usage
 When launched, the exe stays in the taskbar notification area.
 It registers a hotkey (Alt+F1) during startup and unregisters it upon program termination.
